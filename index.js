@@ -2,30 +2,53 @@ var httpstandard = require("http")
 
 var http = {}
 
+http.get = function(url) {
+  return new Promise((resolve, reject) => {
+    var body = ""
+    var req = httpstandard.get(url, (res) => {
+      res.on('data', (chunk) => {
+        body += chunk
+      })
+      res.on('end', () => {
+        resolve(body)
+      })
+    })
+    req.on('error', (err) => {
+      if (err != undefined) {
+        reject(err)
+      }
+    })
+  }).then((body) => {
+    return body
+  }, (err) => {
+    console.log("error", err)
+  })
+}
+ 
 http.post = function(options, data) {
   var content = JSON.stringify(data)
   return new Promise((resolve, reject) => {
     var body = ""
-    var req = httpstandard.request(options, function (res) {
+    var req = httpstandard.request(options, (res) => {
       res.setEncoding('utf8')
-      res.on('data', function(chunk) {
+      res.on('data', (chunk) => {
         body += chunk
       })
-      res.on('end', function() {
+      res.on('end', () => {
         resolve(body)
       })
     })
-    req.on('error', function(err) {
+    req.on('error', (err) => {
        if (err != undefined) {
          reject(err)
        }
     })
     req.write(content)
     req.end()
-  }).then((chunk) => {
-    return chunk
-  }, (error) => {
-    console.log(error)
+  }).then((body) => {
+    return body
+  }, (err) => {
+    console.log("error", err)
   })
 }
 
@@ -45,6 +68,7 @@ if (require.main == module) {
       "params":"",
       "id":0
     }))
+    console.log(await module.exports.get("http://www.un.org/zh/sections/un-charter/preamble/index.html"))
   }
   test()
 }
