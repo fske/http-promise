@@ -1,10 +1,4 @@
-promise form of http
-
-
-example
-
-```
-const httppro = require("http-promise")
+const httppro = require('http-promise')
 
 options = {
   hostname: "127.0.0.1",
@@ -20,5 +14,8 @@ data = {
   "params":""
 }
 
-httppro.post(options, data)
-```
+async function test(options, data) = {
+  console.log(await httppro.post(options, data))
+}
+
+test(options, data)
