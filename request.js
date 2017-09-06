@@ -1,4 +1,4 @@
-var httpa = require("http")
+var httpstandard = require("http")
 
 var http = {}
 
@@ -6,7 +6,7 @@ http.post = function(options, data) {
   var content = JSON.stringify(data)
   return new Promise((resolve, reject) => {
     var body = ""
-    var req = httpa.request(options, function (res) {
+    var req = httpstandard.request(options, function (res) {
       res.setEncoding('utf8')
       res.on('data', function(chunk) {
         body += chunk
@@ -32,5 +32,19 @@ http.post = function(options, data) {
 module.exports = http
 
 if (require.main == module) {
-  console.log(module.exports.post({},{}))
+  async function test() {
+    console.log(await module.exports.post({
+      hostname: '127.0.0.1',
+      port: 80,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+      }
+    },{
+      "jsonrpc":"2.0",
+      "params":"",
+      "id":0
+    }))
+  }
+  test()
 }
